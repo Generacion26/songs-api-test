@@ -1,5 +1,6 @@
 const request = require("supertest")
 const app = require("../app")
+const Genre = require("../models/Genre")
 
 require("../models")
 
@@ -35,6 +36,8 @@ test("GET -> 'URL_ARTISTS', should return code 200 and res.body.length === 1", a
   expect(res.body).toBeDefined()
   expect(res.body).toHaveLength(1)
 
+  expect(res.body[0].genres).toBeDefined()
+  expect(res.body[0].genres).toHaveLength(0)
 })
 
 test("GET ONE-> 'URL_ARTISTS/:id', should return code 200 and res.body.name === artist.name", async () => {
@@ -59,6 +62,28 @@ test("PUT -> 'URL_ARTISTS/:id', should return status code 200 and res.body.name 
   expect(res.status).toBe(200)
   expect(res.body).toBeDefined()
   expect(res.body.name).toBe(artistUpdate.name)
+})
+
+test("POST -> 'URL_ARTISTS/:id/genres', should return status code 200 and res.body.length === 1", async () => {
+
+  const genre = {
+    name: "vallenato"
+  }
+
+  const createGenre = await Genre.create(genre)
+
+  const res = await request(app)
+    .post(`${URL_ARTISTS}/${artistId}/genres`)
+    .send([createGenre.id])
+
+
+
+  expect(res.status).toBe(200)
+  expect(res.body).toBeDefined()
+  expect(res.body).toHaveLength(1)
+  expect(res.body[0].id).toBe(createGenre.id)
+
+  await createGenre.destroy()
 })
 
 

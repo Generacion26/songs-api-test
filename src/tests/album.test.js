@@ -42,10 +42,16 @@ test("GET -> 'URL_ALBUMS', should return status code 200, and res.body.length ==
   const res = await request(app)
     .get(URL_ALBUMS)
 
-
   expect(res.status).toBe(200)
   expect(res.body).toBeDefined()
   expect(res.body).toHaveLength(1)
+
+
+  expect(res.body[0].artist).toBeDefined()
+  expect(res.body[0].artist.id).toBe(artist.id)
+
+  expect(res.body[0].songs).toBeDefined()
+  expect(res.body[0].songs).toHaveLength(0)
 
 })
 
