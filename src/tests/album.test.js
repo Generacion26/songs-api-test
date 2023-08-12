@@ -49,6 +49,16 @@ test("GET -> 'URL_ALBUMS', should return status code 200, and res.body.length ==
 
 })
 
+test("GET ONE-> 'URL_ALBUMS/:id', should return code 200 and res.body.name === album.name", async () => {
+  const res = await request(app)
+    .get(`${URL_ALBUMS}/${albumId}`)
+
+  expect(res.status).toBe(200)
+  expect(res.body).toBeDefined()
+  expect(res.body.name).toBe(album.name)
+
+})
+
 test("PUT -> '/api/v1/albums'/:id', should return status code 200, and res.body.firstName === albumUpdate.name", async () => {
   const albumUpdate = {
     name: "albumUpdate"
